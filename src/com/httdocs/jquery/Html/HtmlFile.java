@@ -1,4 +1,4 @@
-package com.httdocs.jquery;
+package com.httdocs.jquery.Html;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -11,7 +11,7 @@ public class HtmlFile {
     // variables
     private String content = "";
 
-    HtmlFile(String url) {
+    public HtmlFile(String url) {
         setText(url);
     }
 
