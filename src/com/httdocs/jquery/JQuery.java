@@ -3,7 +3,6 @@ package com.httdocs.jquery;
 import com.httdocs.jquery.Html.Constants;
 import com.httdocs.jquery.Html.HtmlFile;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -13,34 +12,51 @@ public class JQuery {
 
     public JQuery(HtmlFile file) {
         String html = file.getText();
-        ArrayList<JQueryObject> jQueryObjects = getObjects(html.trim());
+        JQueryList jQueryObjects = getObjects(html.trim());
 
         // reverse to put the root on front of the list
         Collections.reverse(jQueryObjects);
         buildTree(jQueryObjects);
     }
 
-    private void buildTree(ArrayList<JQueryObject> nodes){
-        printList(nodes);
-        // the patter is this
-        // html = 0
-        // head = 1
-        // title = 2
-        // body = 1
-        // div = 2
-        // if number keeps incrementing, its a child
-        // if you get to a number >= then its not a child
+    private void buildTree(JQueryList nodes) {
+
+        for (int x = 0; x < nodes.size(); x++) {
+            JQueryObject start = nodes.get(x);
+            for (int y = x+1; y < nodes.size(); y++) {
+                JQueryObject run = nodes.get(y);
+
+                if(run.getParent() != null)
+                    break;
+
+                if(start.getDepth()+1 == run.getDepth()){
+                    //System.out.println("START = "+start.getDepth()+", RUN = "+run.getDepth()+" ["+x+", "+y+"]");
+
+                    if(run.getParent() == null){
+                        run.setParent(start);
+                        start.addChild(run);
+                    }
+                    else{
+                        // has a parent already
+                        break;
+                    }
+                }
+            }
+        }
+
+        root = nodes.get(0);
+        printList(root.children().eq(0).children());
     }
 
-    private ArrayList<JQueryObject> getObjects(String html) {
-        ArrayList<JQueryObject> queryObjects = new ArrayList<>();
+    private JQueryList getObjects(String html) {
+        JQueryList queryObjects = new JQueryList();
         Stack<Integer> stack = new Stack<>();
         // need to know depth of node in tree
         int levelDown = 0;
         for (int x = 0; x < html.length(); x++) {
             // get tag
-            if (html.charAt(x) == Constants.lt) {
-                int end = (html.substring(x).indexOf(Constants.gt) + x) + 1;
+            if (html.charAt(x) == Constants.LT) {
+                int end = (html.substring(x).indexOf(Constants.GT) + x) + 1;
                 String tag = html.substring(x, end);
 
                 if (!tag.contains("/")) {
@@ -60,7 +76,7 @@ public class JQuery {
         return queryObjects;
     }
 
-    private void printList(ArrayList a) {
+    private void printList(JQueryList a) {
         for (Object b : a) {
             System.out.println(b + "\n======================");
         }
@@ -70,15 +86,15 @@ public class JQuery {
         if (tag.isEmpty())
             return tag;
 
-        if (!tag.startsWith(Constants.lt + "")) {
-            tag = Constants.lt + tag;
+        if (!tag.startsWith(Constants.LT + "")) {
+            tag = Constants.LT + tag;
         }
-        if (!tag.endsWith(Constants.gt + "")) {
-            tag = tag + Constants.gt;
+        if (!tag.endsWith(Constants.GT + "")) {
+            tag = tag + Constants.GT;
         }
 
-        if (!tag.startsWith(Constants.lt + "/")) {
-            int i = tag.indexOf(Constants.lt) + 1;
+        if (!tag.startsWith(Constants.LT + "/")) {
+            int i = tag.indexOf(Constants.LT) + 1;
             tag = tag.substring(0, i) + "/" + tag.substring(i);
         }
 
@@ -86,8 +102,8 @@ public class JQuery {
     }
 
     private boolean isComplete(String html) {
-        if (html.startsWith(Constants.lt + "")) {
-            int i = html.indexOf(Constants.gt);
+        if (html.startsWith(Constants.LT + "")) {
+            int i = html.indexOf(Constants.GT);
 
             String tag = html.substring(0, i + 1);
 
