@@ -7,18 +7,46 @@ package com.httdocs.jquery;
 // each object will have children and parents,
 // unless its the root, or the tree is empty
 
+import java.util.ArrayList;
+
 public class JQueryObject {
     // original html
     private String html="";
+    private int depthInTree=-1;
+    private ArrayList<JQueryObject> children = new ArrayList<>();
+    private JQueryObject parent = null;
 
     public JQueryObject(String html){
         this.html = html;
     }
 
+
+    public void addChild(JQueryObject child){
+        children.add(child);
+    }
+
+    public void setParent(JQueryObject parent){
+        this.parent = parent;
+    }
+
+    public JQueryObject getParent() {
+        return parent;
+    }
+
+    public void setDepth(int depth) {
+        this.depthInTree = depth;
+    }
+
+    public int getDepth() {
+        return depthInTree;
+    }
+
     // try to implement following methods
     public void find(String selector){}
 
-    public void children(){}
+    public ArrayList<JQueryObject> children(){
+        return children;
+    }
 
     public void chidren(String selector){}
 
@@ -29,6 +57,6 @@ public class JQueryObject {
     public void attr(String attribute, String changeTo){}
 
     public String toString(){
-        return html;
+        return "[Depth = "+depthInTree+"]\n"+html;
     }
 }
