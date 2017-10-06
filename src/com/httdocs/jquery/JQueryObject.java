@@ -7,13 +7,11 @@ package com.httdocs.jquery;
 // each object will have children and parents,
 // unless its the root, or the tree is empty
 
-import java.util.ArrayList;
-
 public class JQueryObject {
     // original html
     private String html="";
     private int depthInTree=-1;
-    private ArrayList<JQueryObject> children = new ArrayList<>();
+    private JQueryList children = new JQueryList();
     private JQueryObject parent = null;
 
     public JQueryObject(String html){
@@ -44,7 +42,7 @@ public class JQueryObject {
     // try to implement following methods
     public void find(String selector){}
 
-    public ArrayList<JQueryObject> children(){
+    public JQueryList children(){
         return children;
     }
 
