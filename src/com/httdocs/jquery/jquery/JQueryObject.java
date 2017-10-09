@@ -75,17 +75,21 @@ public class JQueryObject extends JSkeleton implements Comparable{
             return html;
         }
         else{
-            String del = arr[arr.length-1];
-            del = del.substring(0, del.indexOf(Constants.LT));
-            StringBuilder build = new StringBuilder();
-            for(int x = 0; x<arr.length; x++){
-                build.append(arr[x].replaceFirst(del, ""));
-                build.append("\n");
+            try {
+                String del = arr[arr.length - 1];
+                del = del.substring(0, del.indexOf(Constants.LT));
+                StringBuilder build = new StringBuilder();
+                for (int x = 0; x < arr.length; x++) {
+                    build.append(arr[x].replaceFirst(del, ""));
+                    build.append("\n");
+                }
+
+                build.deleteCharAt(build.length() - 1);
+                return build.toString();
+            }catch (Exception e){
+                System.out.println("Couldn\'t align -->"+html+"<--\n");
+                return html;
             }
-
-            build.deleteCharAt(build.length()-1);
-
-            return build.toString();
         }
     }
 
@@ -96,7 +100,7 @@ public class JQueryObject extends JSkeleton implements Comparable{
     String extractIdOrClass(String header, String parseOut){
         // parseOut == "id' || parseOut == "class"
         for(JQueryObject object: children.getList()){
-            header  = header.replaceAll(object.getOriginal(),"");
+            //header  = header.replaceAll(object.getOriginal(),"");
         }
 
         header = header.replaceAll("\n\\s+","\n");
