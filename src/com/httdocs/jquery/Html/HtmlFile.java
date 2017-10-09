@@ -81,4 +81,65 @@ public class HtmlFile {
     public String getText() {
         return content;
     }
+
+    // -------------- help methods --------------
+    public static boolean isVoidTag(String tag) {
+        if (tag.startsWith(Constants.LT + "")) {
+            String innerTag = parseElementOut(tag);
+
+            for (String t : Constants.VOID_ELEMENTS) {
+                if (t.equals(innerTag)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            System.out.println("NOT A TAG = " + tag);
+            return false;
+        }
+    }
+
+    public static String parseElementOut(String tag) {
+        if (tag.startsWith(Constants.LT + "")) {
+            String innerTag = tag.substring(0, tag.indexOf(Constants.GT));
+            innerTag = innerTag.replaceAll(Constants.GT+"","");
+            innerTag = innerTag.replaceAll(Constants.LT+"","");
+            innerTag = innerTag.replaceAll("/","");
+
+            innerTag = innerTag.split("\\s+")[0];
+            return innerTag.trim();
+        } else {
+            System.out.println("NOT A TAG = " + tag);
+            return tag;
+        }
+    }
+
+    public static boolean isNonImportant(String tag){
+        if(tag.startsWith(Constants.LT+"")) {
+            String fixed = tag.replaceAll("\\s+", "");
+            return fixed.startsWith(Constants.LT+"!");
+
+        }else{
+            System.out.println("NOT A TAG = " + tag);
+            return false;
+        }
+    }
+
+    public static boolean isSelfClosing(String tag) {
+        tag = tag.replaceAll("\\s+", "");
+        return tag.endsWith("/" + Constants.GT);
+    }
+
+    public static boolean isClosingTag(String tag){
+        tag = tag.replaceAll("\\s+","");
+        return tag.startsWith(Constants.LT+"/");
+    }
+
+    public static String ignoreEmbeddedLang(String html){
+        String question = "<[?].*?[?]>";
+        String mod = "<[%].*?[%]>";
+        String comment = "<[!].*?>";
+
+        return html.replaceAll(question, "").replaceAll(mod, "").replaceAll(comment, "");
+    }
 }
