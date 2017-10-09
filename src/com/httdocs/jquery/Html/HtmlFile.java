@@ -141,7 +141,7 @@ public class HtmlFile {
         String comment = "<[!].*?>";
 
         html = html.replaceAll(question, "").replaceAll(mod, "").
-                replaceAll(comment, "").replaceAll("< <","<").replaceAll("<!.*?-->","").
+                replaceAll(comment, "").replaceAll("< <","<").
                 replaceAll("\n+","\n");
 
         return removeFrom(removeFrom(html, "<!--","-->"), "<script", "/script>");
