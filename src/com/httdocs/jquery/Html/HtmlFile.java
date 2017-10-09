@@ -140,6 +140,26 @@ public class HtmlFile {
         String mod = "<[%].*?[%]>";
         String comment = "<[!].*?>";
 
-        return html.replaceAll(question, "").replaceAll(mod, "").replaceAll(comment, "");
+        html = html.replaceAll(question, "").replaceAll(mod, "").
+                replaceAll(comment, "").replaceAll("< <","<").
+                replaceAll("\n+","\n");
+
+        return removeScripting(html);
+    }
+
+    private static String removeScripting(String html){
+        html = html.replaceAll("<\\s+(script)","<script");
+
+        StringBuilder builder = new StringBuilder(html);
+
+        while(builder.indexOf("<script") !=-1){
+            int a = builder.indexOf("<script");
+            int b = builder.indexOf("/script>")+8;
+
+            //System.out.println(builder.substring(a, b));
+            builder.delete(a,b);
+        }
+
+        return builder.toString();
     }
 }
