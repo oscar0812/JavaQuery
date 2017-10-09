@@ -146,7 +146,7 @@ public class JQueryList extends JSkeleton{
         StringBuilder builder = new StringBuilder();
         for(JQueryObject o: MAIN_LIST){
             builder.append(o.html());
-            builder.append("\n");
+            builder.append("\n\n");
         }
 
         return builder.toString().trim();
