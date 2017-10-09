@@ -141,20 +141,20 @@ public class HtmlFile {
         String comment = "<[!].*?>";
 
         html = html.replaceAll(question, "").replaceAll(mod, "").
-                replaceAll(comment, "").replaceAll("< <","<").
+                replaceAll(comment, "").replaceAll("< <","<").replaceAll("<!.*?-->","").
                 replaceAll("\n+","\n");
 
-        return removeScripting(html);
+        return removeFrom(removeFrom(html, "<!--","-->"), "<script", "/script>");
     }
 
-    private static String removeScripting(String html){
-        html = html.replaceAll("<\\s+(script)","<script");
+    // remove all the elements in html that are in the range from ind of first to ind of secondTag
+    private static String removeFrom(String html, String firstTag, String secondTag){
 
         StringBuilder builder = new StringBuilder(html);
 
-        while(builder.indexOf("<script") !=-1){
-            int a = builder.indexOf("<script");
-            int b = builder.indexOf("/script>")+8;
+        while(builder.indexOf(firstTag) !=-1){
+            int a = builder.indexOf(firstTag);
+            int b = builder.indexOf(secondTag)+secondTag.length();
 
             //System.out.println(builder.substring(a, b));
             builder.delete(a,b);
