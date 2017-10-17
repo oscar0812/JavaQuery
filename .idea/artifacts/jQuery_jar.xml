@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="jQuery:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/jQuery_jar</output-path>
+    <root id="archive" name="jQuery.jar">
+      <element id="module-output" name="jQuery" />
+    </root>
+  </artifact>
+</component>
